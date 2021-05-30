@@ -1,27 +1,24 @@
 package main
 
 import (
-	"go-api-demo/controller"
-	"go-api-demo/middleware"
+	"fmt"
+	"go-api-demo/Config"
+	"go-api-demo/Models"
+	"go-api-demo/Routes"
 
-	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
+var err error
+
 func main() {
-	engine := gin.Default()
-	// ミドルウェア
-	engine.Use(middleware.RecordUaAndTime)
-	// CRUD 書籍
-	bookEngine := engine.Group("/book")
-	{
-		v1 := bookEngine.Group("/v1")
-		{
-			v1.POST("/add", controller.BookAdd)
-			v1.GET("/list", controller.BookList)
-			v1.PUT("/update", controller.BookUpdate)
-			v1.DELETE("/delete", controller.BookDelete)
-		}
+	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	if err != nil {
+		fmt.Println("Status:", err)
 	}
-	engine.Run(":3000")
+	defer Config.DB.Close()
+	Config.DB.AutoMigrate(&Models.User{})
+	r := Routes.SetupRouter()
+	//running
+	r.Run()
 }
