@@ -6,6 +6,7 @@ import (
 	"go-api-demo/model"
 	"log"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
 
