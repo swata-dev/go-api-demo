@@ -22,8 +22,8 @@ func BuildDBConfig() *DBConfig {
 		Host:     "localhost",
 		Port:     3306,
 		User:     "root",
-		Password: "sota08010685",
-		DBName:   "api_demo",
+		Password: "***********",
+		DBName:   "go_api_demo",
 	}
 	return &dbConfig
 }
